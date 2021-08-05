@@ -6,21 +6,29 @@ import (
 	"path/filepath"
 
 	"github.com/juandiii/jetson-monitor/logging"
+	"github.com/patrickmn/go-cache"
 	"gopkg.in/yaml.v3"
 )
 
 type URL struct {
-	URL           string `yaml:"url"`
-	StatusCode    *int   `yaml:"status_code"`
-	SlackToken    string `yaml:"slack_token"`
-	TelegramToken string `yaml:"telegram_token"`
-	Scheduler     string `yaml:"scheduler"`
+	URL            string `yaml:"url"`
+	Match          string `yaml:"match"`
+	Timeout        int64  `yaml:"timeout"`
+	ResponseTime   *int   `yaml:"response_time"`
+	NotifyInterval *int64 `yaml:"notify_interval"`
+	StatusCode     *int   `yaml:"status_code"`
+	SlackToken     string `yaml:"slack_token"`
+	TelegramToken  string `yaml:"telegram_token"`
+	DingdingToken  string `yaml:"dingding_token"`
+	DingdingTitle  string `yaml:"dingding_title"`
+	Scheduler      string `yaml:"scheduler"`
 }
 
 type ConfigJetson struct {
 	Urls []URL `yaml:"urls"`
 
 	Logger *logging.StandardLogger
+	Cache  *cache.Cache
 }
 
 //Load Configuration

@@ -22,4 +22,6 @@
 /bin
 
 config.yml
+.vscode
+.idea
 
