@@ -1,6 +1,8 @@
 package logging
 
 import (
+	"io"
+	"log"
 	"os"
 
 	"github.com/op/go-logging"
@@ -16,8 +18,13 @@ type StandardLogger struct {
 
 func NewLogger() *StandardLogger {
 	var baseLogger = &logging.Logger{}
-
-	backend := logging.NewLogBackend(os.Stderr, "", 0)
+	logFile := "./monitor.log"
+	f, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	mw := io.MultiWriter(os.Stdout, f)
+	backend := logging.NewLogBackend(mw, "", 0)
 
 	var standardLogger = &StandardLogger{baseLogger}
 	backendFormatter := logging.NewBackendFormatter(backend, format)
